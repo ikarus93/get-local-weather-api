@@ -7,18 +7,25 @@
   <title>Get Your Local Weather</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css">
   <link rel="stylesheet" href="css/styles.css?v=1.0">
-
+  <link href="css/weather-icon-animated.css" rel="stylesheet">
   <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
   <![endif]-->
 </head>
 
 <body>
+  <div class="city-select">
+    <label for="city">Whats your city?</label>
+    <input id="city" />
+    <button class="city-submit btn btn-primary">Submit</button>
+  </div>
   <div class="container">
   <div class="scale"><button class="celcius btn btn-primary active">Celcius</button><button class="fahrenheit btn btn-secondary">Fahrenheit</button></div>
   <ul class="output"></ul>
-  <img id="icon" src=""/>
+  <div id="icon"></div>
     </div>
+    
+    <p class="test">Test</p>
     
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="js/scripts.js"></script>

@@ -1,18 +1,65 @@
+
+  const icons = {"Clouds": `<div class="icon cloudy">
+                          <div class="cloud"></div>
+                          <div class="cloud"></div>
+                          </div>`, 
+              "Thunderstorm": `<div class="icon thunder-storm">
+                                <div class="cloud"></div>
+                                <div class="lightning">
+                                <div class="bolt"></div>
+                                <div class="bolt"></div>
+                                </div>
+                                </div>`,
+              "Drizzle": `<div class="icon sun-shower">
+                          <div class="cloud"></div>
+                          <div class="sun">
+                          <div class="rays"></div>
+                          </div>
+                          <div class="rain"></div>
+                          </div>`,
+              "Rain":    `<div class="icon rainy">
+                          <div class="cloud"></div>
+                          <div class="rain"></div>
+                          </div>`,
+              "Snow":    `<div class="icon flurries">
+                          <div class="cloud"></div>
+                          <div class="snow">
+                          <div class="flake"></div>
+                          <div class="flake"></div>
+                          </div>
+                          </div>`,
+              "Clear":   `<div class="icon sunny">
+                          <div class="sun">
+                          <div class="rays"></div>
+                          </div>
+                          </div>`}
+
 function getLocation() {
   //function that get geoData from User
   if (navigator.geolocation) {
     return navigator.geolocation.getCurrentPosition(callToServer);
   } else {
-    alert("Geolocation is not supported by this browser.");
+    alert("Couldnt load your Geodata. Please tell us your city")
+    $(".city-select").fadeIn();
   }
 }
-function callToServer(location) {
+
+
+
+function callToServer(location, city) {
     //Sends the location to backend and then parses response
-    $.post("https://backend-jsonweather-atheos.c9users.io/weather", {data: location}, function(data) {
+    
+    
+    $.post("https://backend-jsonweather-atheos.c9users.io/weather", {data:{loc: location, geo: location === true, city: city || undefined}}, function(data) {
+        if (data === 404) alert("Content could not be found. Please try reloading the page!")
         handleWeatherData(data);
     })
 }
 
+function selectIcon(weather) {
+  //Selects the icon class to load based on the current weather
+  return icons[weather];
+}
 function handleWeatherData(res) {
   res = JSON.parse(res);
   //Adds the returned data to the dom
@@ -21,7 +68,7 @@ function handleWeatherData(res) {
         $("<li></li>").text(res.weather[0].main),
         $("<li class='temp'></li>").text(Math.floor(res.main.temp) + " C°")
       );
-      $("#icon").attr("src", res.weather[0].icon);
+      $("#icon").append(selectIcon(res.weather[0].main))
     
   
 }
@@ -45,7 +92,19 @@ function convert(toCelcius) {
 $(function() {
   let val;
   getLocation();
-        
+  
+
+//Handlers for Cityselection
+$(".city-select").hide()   //by default
+$(".city-submit").click(function() {
+  callToServer(null, $("#city").val())
+  $(".city-select").fadeOut();
+})
+
+//Tester 
+$(".test").click(function() {
+  $(".city-select").fadeIn();
+})
         
 $('button').click( function() {
   if (!($(this).hasClass("active"))) {       //check if button is active, if not convert the temperature value and change button appearance

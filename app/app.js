@@ -1,24 +1,24 @@
 const express = require('express'),
-      app = express(),
-      parser = require('body-parser'),
-      logic = require('./logic/data');
+    app = express(),
+    parser = require('body-parser'),
+    logic = require('./logic/data');
 
-app.use(express.static('public'))      
-app.use(parser.urlencoded({ extended: false }));
+app.use(express.static('public'))
+app.use(parser.urlencoded({
+    extended: false
+}));
 
 app.post("/weather", (req, res) => {
     let url;
-    console.log("got request")
     //Determine if we use location geodata or the users manually retrieved city
-    if(req.body['data[geo]']) {
+    if (req.body['data[geo]'] !== 'false') {
         url = `http://api.openweathermap.org/data/2.5/weather?lat=${req.body['data[loc][coords][latitude]']}&lon=${req.body['data[loc][coords][longitude]']}`
     } else {
         url = `http://api.openweathermap.org/data/2.5/weather?q=${req.body['data[city]']}`;
     }
-    
+
     logic.getWeather(url, (err, result) => {
         if (err) return res.send(404);
-        console.log(result)
         res.send(result);
     })
 })

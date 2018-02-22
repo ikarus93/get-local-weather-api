@@ -1,4 +1,5 @@
 const icons = {
+    //Holds html reference to the different possible weather icons
     "Clouds": `<div class="icon cloudy">
                           <div class="cloud"></div>
                           <div class="cloud"></div>
@@ -36,24 +37,24 @@ const icons = {
 }
 
 function getLocation() {
-    //function that get geoData from User
+    //function that gets geoData from User, if user doesnt permit HTML-geolocation API, slideDown city-select panel
     if (navigator.geolocation) {
         return navigator.geolocation.getCurrentPosition(callToServer);
     } else {
         alert("Couldnt load your Geodata. Please tell us your city")
-        $(".city-select").fadeIn();
+        $(".city-select").slideDown();
     }
 }
 
 
 
 function callToServer(location, city) {
-    //Sends the location to backend and then parses response
-
+    //Sends the location to backend and then passes response to handler
+    
     $.post("https://backend-jsonweather-atheos.c9users.io/weather", {
         data: {
             loc: location,
-            geo: location === true,
+            geo: location != null,
             city: city || undefined
         }
     }, function(data) {
@@ -81,7 +82,6 @@ function buttonLogic(btn) {
 }
 
 function handleWeatherData(res) {
-
     //delete all previous weather interface 
     $(".output").empty();
     $("#icon").empty();
@@ -123,12 +123,12 @@ $(function() {
     $(".city-select").hide() //by default
     $(".city-submit").click(function() {
         callToServer(null, $("#city").val())
-        $(".city-select").fadeOut();
+        $(".city-select").slideUp();
     })
 
-    //Tester 
-    $(".test").click(function() {
-        $(".city-select").fadeIn();
+    $(".search-by-city").click(function() {
+        $(".city-select").slideDown();
+        
     })
 
     $('.temp-btn').click(function() {

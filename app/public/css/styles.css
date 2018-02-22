@@ -22,7 +22,13 @@ li {
 .city-select {
   background-color: black;
   text-align: center;
-  height: 100%;
   width: 100%;
   color: #fff;
+}
+
+.search-by-city {
+  position: fixed;
+  bottom: 0;
+  left: 45%;
+  margin: 0 auto 10px;
 }
